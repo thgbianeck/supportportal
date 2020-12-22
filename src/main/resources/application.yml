@@ -1,3 +1,6 @@
+jwt:
+  secret: '[a-zA-Z0-9._]^+$ThisIsMyApplication27@ImadeThis#'
+
 server:
   port: 8081
 
