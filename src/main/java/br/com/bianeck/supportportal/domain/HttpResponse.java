@@ -1,19 +1,26 @@
 package br.com.bianeck.supportportal.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+import java.util.Date;
+
+@Data
 public class HttpResponse {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
+    private Date timeSTamp;
     private int httpStatusCode; // 200, 201, 400, 500
     private HttpStatus httpStatus;
     private String reason;
     private String message;
+
+    public HttpResponse(int httpStatusCode, HttpStatus httpStatus, String reason, String message) {
+        this.timeSTamp = new Date();
+        this.httpStatusCode = httpStatusCode;
+        this.httpStatus = httpStatus;
+        this.reason = reason;
+        this.message = message;
+    }
 }
