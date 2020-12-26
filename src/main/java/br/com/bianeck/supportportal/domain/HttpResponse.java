@@ -10,14 +10,14 @@ import java.util.Date;
 public class HttpResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
-    private Date timeSTamp;
+    private Date timeStamp;
     private int httpStatusCode; // 200, 201, 400, 500
     private HttpStatus httpStatus;
     private String reason;
     private String message;
 
     public HttpResponse(int httpStatusCode, HttpStatus httpStatus, String reason, String message) {
-        this.timeSTamp = new Date();
+        this.timeStamp = new Date();
         this.httpStatusCode = httpStatusCode;
         this.httpStatus = httpStatus;
         this.reason = reason;
