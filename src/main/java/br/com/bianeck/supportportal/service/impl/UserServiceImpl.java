@@ -1,9 +1,7 @@
 package br.com.bianeck.supportportal.service.impl;
 
-import br.com.bianeck.supportportal.constant.FileConstant;
 import br.com.bianeck.supportportal.domain.User;
 import br.com.bianeck.supportportal.domain.UserPrincipal;
-import br.com.bianeck.supportportal.enumeration.Role;
 import br.com.bianeck.supportportal.exception.domain.EmailExistException;
 import br.com.bianeck.supportportal.exception.domain.UserNotFoundException;
 import br.com.bianeck.supportportal.exception.domain.UsernameExistException;
@@ -21,14 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
 import static br.com.bianeck.supportportal.constant.FileConstant.*;
 import static br.com.bianeck.supportportal.constant.UserImplConstant.*;
-import static br.com.bianeck.supportportal.enumeration.Role.*;
+import static br.com.bianeck.supportportal.enumeration.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Slf4j
