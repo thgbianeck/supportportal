@@ -6,6 +6,7 @@ import br.com.bianeck.supportportal.exception.domain.EmailExistException;
 import br.com.bianeck.supportportal.exception.domain.UserNotFoundException;
 import br.com.bianeck.supportportal.exception.domain.UsernameExistException;
 import br.com.bianeck.supportportal.repository.UserRepository;
+import br.com.bianeck.supportportal.service.LoginAttemptService;
 import br.com.bianeck.supportportal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,20 +38,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final LoginAttemptService loginAttemptService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUsername(username);
         if(user == null) {
-            final String message = "User not found by username: " + username;
+            final String message = NO_USER_FOUND_BY_USERNAME + username;
             log.error(message);
             throw new UsernameNotFoundException(message);
         } else {
+            validateLoginAttempt(user);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);
-            log.info("Returning found user by username: " + username);
+            log.info(FOUND_USER_BY_USERNAME + username);
             return userPrincipal;
         }
     }
@@ -125,6 +128,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
             return null;
+        }
+    }
+
+    private void validateLoginAttempt(User user) {
+        if(user.isNotLocked()) {
+            if(loginAttemptService.hasExceededMaxAttempts(user.getUsername())) {
+                user.setNotLocked(false);
+            } else {
+                user.setNotLocked(true);
+            }
+        } else {
+            loginAttemptService.evictUserFromLoginAttemptCache(user.getUsername());
         }
     }
 
