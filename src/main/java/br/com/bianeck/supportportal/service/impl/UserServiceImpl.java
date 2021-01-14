@@ -6,6 +6,7 @@ import br.com.bianeck.supportportal.exception.domain.EmailExistException;
 import br.com.bianeck.supportportal.exception.domain.UserNotFoundException;
 import br.com.bianeck.supportportal.exception.domain.UsernameExistException;
 import br.com.bianeck.supportportal.repository.UserRepository;
+import br.com.bianeck.supportportal.service.EmailService;
 import br.com.bianeck.supportportal.service.LoginAttemptService;
 import br.com.bianeck.supportportal.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginAttemptService loginAttemptService;
+    private EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User register(String firstName, String lastName, String username, String email)
-            throws UserNotFoundException, UsernameExistException, EmailExistException {
+            throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
         validateNewUsernameAndEmail(EMPTY, username, email);
 
         String password = generatePassword();
@@ -81,6 +84,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         userRepository.save(user);
         log.info("New user password: " + password);
+        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
