@@ -5,11 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.stream;
 
 /**
  * Criado utilizando IntelliJ IDEA.
