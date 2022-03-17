@@ -1,6 +1,7 @@
 package br.com.bnck.supportportal.service;
 
 import com.google.common.cache.LoadingCache;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ExecutionException;
  * Data: 22/02/2022
  * Hora: 23:44
  */
+@Service
 public class LoginAttemptService {
 
     private static final int MAXIMUM_NUMBER_OF_ATTEMPTS = 5;
